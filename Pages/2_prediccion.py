@@ -1,7 +1,9 @@
 from dash import html, dcc, register_page
 
+#Registramos la página
 register_page(__name__, path="/prediccion", name="Predicción")
 
+#Definimos el layout de la página que contiene los datos que vamos a recolectar
 layout = html.Div([
     html.H2("Predicción", style={'textAlign': 'center', 'color': '#1E3A8A'}),
     html.Label("Edad"),
@@ -34,6 +36,8 @@ layout = html.Div([
     html.Label("¿Tu familia tiene automovil?"),
     dcc.Dropdown(options=["Sí", "No"]),
     html.Br(),
+
+    #Creamos el botón que corre el modelo y despliega los resultaods
     html.A("Predecir mi Resultado", href="/resultados",
            style={
                'display': 'block', 'margin': '2rem auto',
