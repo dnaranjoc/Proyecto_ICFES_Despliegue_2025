@@ -10,9 +10,9 @@ import os
 import pandas as pd
 from sodapy import Socrata
 
-LIMIT = 40000  # Límite de filas que se importarán
+LIMIT = 8000000  # Límite de filas que se importarán
 OUTPUT_DIR = "data"
-OUTPUT_FILE = "datos.csv"
+OUTPUT_FILE = "datos.parquet"
 
 def parse_args(args):
     """
@@ -56,10 +56,10 @@ def combinar_datos(datos_dict):
     print(f"DataFrame final con {len(archivo)} filas y {len(archivo.columns)} columnas.")
     return archivo
 
-def guardar_csv(df, output_dir, filename):
+def guardar_parquet(df, output_dir, filename):
     os.makedirs(output_dir, exist_ok=True)
     ruta = os.path.join(output_dir, filename)
-    df.to_csv(ruta, index=False)
+    df.to_parquet(ruta, index=False)
     print(f"Datos guardados en {ruta}")
     return ruta
 
