@@ -1,4 +1,6 @@
 [core]
-    remote = fuentelocal
+    remote = aws-remote
 ['remote "fuentelocal"']
     url = /tmp/dvcstore
+['remote "aws-remote"']
+    url = s3://saberinsightproj-dvcstore
