@@ -1,9 +1,11 @@
 # ===============================================================
+# mlflow-icfes-OLS.py
+# Entrena modelos de regresión lineal sobre datasets escalados
+# ===============================================================
+
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
-from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import mlflow
 import mlflow.sklearn
@@ -11,66 +13,29 @@ from mlflow.models.signature import infer_signature
 import os
 
 # ===============================================================
-# 1️⃣ Cargar datos
+# 1️⃣ Configurar dataset a usar (mismo nombre que en fit_scaler.py)
 # ===============================================================
-dataset_path = "data/saber11_encoded1.parquet"
-df = pd.read_parquet(dataset_path)
-
-# Nombre del dataset (por ejemplo, para trackear en MLflow)
-dataset_name = os.path.basename(dataset_path).replace(".parquet", "")
+dataset_name = "saber11_encoded1"   # 👈 Cambia a "saber11_encoded2" según el dataset escalado que quieras usar
+scaled_path = f"data/scaled/{dataset_name}"
 
 # ===============================================================
-# 2️⃣ Definir variables predictoras y de salida
+# 2️⃣ Cargar datasets escalados
 # ===============================================================
-Y_cols = [
-    'punt_lectura_critica',
-    'punt_matematicas',
-    'punt_sociales_ciudadanas',
-    'punt_c_naturales',
-    'punt_ingles'
-]
+print(f"📦 Cargando datasets escalados de: {scaled_path}")
 
-Y = df[Y_cols]
-X = df.drop(columns=Y_cols + ['punt_global'])
+X_train_scaled = pd.read_parquet(f"{scaled_path}_X_train_scaled.parquet")
+X_val_scaled = pd.read_parquet(f"{scaled_path}_X_val_scaled.parquet")
 
-# ===============================================================
-# 3️⃣ Partición train/val/test
-# ===============================================================
-X_temp, X_test, y_temp, y_test = train_test_split(
-    X, Y, test_size=0.2, random_state=42
-)
+y_train = pd.read_parquet(f"{scaled_path}_y_train.parquet")
+y_val = pd.read_parquet(f"{scaled_path}_y_val.parquet")
 
-X_train, X_val, y_train, y_val = train_test_split(
-    X_temp, y_temp, test_size=0.2, random_state=42
-)
+print(f"✅ Datasets cargados: Train={len(X_train_scaled):,}, Val={len(X_val_scaled):,}")
 
 # ===============================================================
-# 4️⃣ Estandarizar (solo fit con train)
+# 3️⃣ Reducción opcional del tamaño de entrenamiento
 # ===============================================================
-scaler = StandardScaler()
-X_train_scaled = pd.DataFrame(
-    scaler.fit_transform(X_train),
-    columns=X_train.columns,
-    index=X_train.index
-)
-
-X_val_scaled = pd.DataFrame(
-    scaler.transform(X_val),
-    columns=X_val.columns,
-    index=X_val.index
-)
-
-X_test_scaled = pd.DataFrame(
-    scaler.transform(X_test),
-    columns=X_test.columns,
-    index=X_test.index
-)
-
-# ===============================================================
-# 5️⃣ Reducción opcional del tamaño de entrenamiento
-# ===============================================================
-reduce_train = True         # 👈 Cambia a False si quieres usar todos los datos
-n_rows_train = 1000000    # límite máximo de filas
+reduce_train = True       # 👈 Cambia a False si quieres usar todos los datos
+n_rows_train = 1_000_000  # límite máximo de filas (usa _ para legibilidad)
 
 if reduce_train and len(X_train_scaled) > n_rows_train:
     X_train_small = X_train_scaled.sample(n=n_rows_train, random_state=42)
@@ -82,25 +47,28 @@ else:
     print(f"📈 Usando todas las {len(X_train_small):,} filas para entrenamiento.")
 
 # ===============================================================
-# 6️⃣ Configuración de MLflow
+# 4️⃣ Configuración de MLflow
 # ===============================================================
 experiment = mlflow.set_experiment("SaberInsight_Modelos")
 
 # ===============================================================
-# 7️⃣ Entrenar y registrar resultados
+# 5️⃣ Entrenamiento y registro
 # ===============================================================
 metricas_val = {}
 
 for col in y_train.columns:
     print(f"\n🔹 Entrenando modelo para: {col}")
 
-    with mlflow.start_run(experiment_id=experiment.experiment_id, run_name=f"{col}"):
+    with mlflow.start_run(experiment_id=experiment.experiment_id, run_name=f"{dataset_name}_{col}"):
 
+        # Modelo
         modelo = LinearRegression()
         modelo.fit(X_train_small, y_train_small[col])
 
+        # Predicción sobre validación
         y_pred_val = modelo.predict(X_val_scaled)
 
+        # Métricas
         mae_val = mean_absolute_error(y_val[col], y_pred_val)
         mse_val = mean_squared_error(y_val[col], y_pred_val)
         r2_val = r2_score(y_val[col], y_pred_val)
@@ -118,6 +86,7 @@ for col in y_train.columns:
         mlflow.log_metric("MSE_val", mse_val)
         mlflow.log_metric("R2_val", r2_val)
 
+        # Guardar modelo con firma
         signature = infer_signature(X_val_scaled, y_pred_val)
         mlflow.sklearn.log_model(
             modelo,
@@ -126,4 +95,4 @@ for col in y_train.columns:
             input_example=X_val_scaled.head(3)
         )
 
-print("\n✅ Entrenamiento completado (validation)")
+print("\n✅ Entrenamiento completado y registrado en MLflow (validation)")
