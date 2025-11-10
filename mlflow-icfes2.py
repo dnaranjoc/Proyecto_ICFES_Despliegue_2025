@@ -41,7 +41,7 @@ X_train, X_val, y_train, y_val = train_test_split(
 # 4️⃣ Reducir tamaño de entrenamiento (sample)
 # ===============================================================
 # Ajusta n_rows_train según memoria disponible
-n_rows_train = 30000  # ejemplo: 30k filas
+n_rows_train = 1000000  # ejemplo: 30k filas
 if len(X_train) > n_rows_train:
     X_train_small = X_train.sample(n=n_rows_train, random_state=42)
     y_train_small = y_train.loc[X_train_small.index]
@@ -86,7 +86,13 @@ for col in y_train.columns:
         mlflow.log_metric("MSE_val", mse_val)
         mlflow.log_metric("R2_val", r2_val)
 
-        # Guardar modelo
-        mlflow.sklearn.log_model(modelo, artifact_path=f"{col}_LinearRegression")
+        # Guardar modelo con 'name' y firma
+        signature = infer_signature(X_val, y_pred_val)
+        mlflow.sklearn.log_model(
+            modelo,
+            name=f"{col}_LinearRegression",
+            signature=signature,
+            input_example=X_val.head(3)
+        )
 
 print("\n✅ Entrenamiento completado (validation)")
