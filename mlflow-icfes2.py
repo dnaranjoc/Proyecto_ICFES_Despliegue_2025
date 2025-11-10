@@ -41,7 +41,7 @@ X_train, X_val, y_train, y_val = train_test_split(
 # 4️⃣ Reducir tamaño de entrenamiento (sample)
 # ===============================================================
 # Ajusta n_rows_train según memoria disponible
-n_rows_train = 50000  # ejemplo: 50k filas
+n_rows_train = 30000  # ejemplo: 30k filas
 if len(X_train) > n_rows_train:
     X_train_small = X_train.sample(n=n_rows_train, random_state=42)
     y_train_small = y_train.loc[X_train_small.index]
