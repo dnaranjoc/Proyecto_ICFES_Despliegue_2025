@@ -6,6 +6,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import mlflow
 import mlflow.sklearn
+from mlflow.models.signature import infer_signature
 
 # ===============================================================
 # 1️⃣ Cargar datos
