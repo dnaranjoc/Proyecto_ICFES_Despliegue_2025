@@ -10,7 +10,7 @@ import mlflow.sklearn
 # ===============================================================
 # 1️⃣ Cargar datos
 # ===============================================================
-df = pd.read_parquet("saber11_encoded.parquet")
+df = pd.read_parquet("data/saber11_encoded.parquet")
 
 # ===============================================================
 # 2️⃣ Definir variables predictoras y de salida
@@ -38,12 +38,24 @@ X_train, X_val, y_train, y_val = train_test_split(
 )
 
 # ===============================================================
-# 4️⃣ Configuración de MLflow
+# 4️⃣ Reducir tamaño de entrenamiento (sample)
+# ===============================================================
+# Ajusta n_rows_train según memoria disponible
+n_rows_train = 50000  # ejemplo: 50k filas
+if len(X_train) > n_rows_train:
+    X_train_small = X_train.sample(n=n_rows_train, random_state=42)
+    y_train_small = y_train.loc[X_train_small.index]
+else:
+    X_train_small = X_train.copy()
+    y_train_small = y_train.copy()
+
+# ===============================================================
+# 5️⃣ Configuración de MLflow
 # ===============================================================
 experiment = mlflow.set_experiment("Saber11_Modelos")
 
 # ===============================================================
-# 5️⃣ Entrenar OLS y registrar resultados (solo validation)
+# 6️⃣ Entrenar LinearRegression y registrar resultados (solo validation)
 # ===============================================================
 metricas_val = {}
 
@@ -53,9 +65,9 @@ for col in y_train.columns:
     with mlflow.start_run(run_name=f"{col}"):
         # Modelo
         modelo = LinearRegression()
-        modelo.fit(X_train, y_train[col])
+        modelo.fit(X_train_small, y_train_small[col])
 
-        # Predicción
+        # Predicción sobre validation
         y_pred_val = modelo.predict(X_val)
 
         # Métricas solo sobre validation
@@ -68,6 +80,7 @@ for col in y_train.columns:
         # Registro en MLflow
         mlflow.log_param("model_type", "LinearRegression")
         mlflow.log_param("target", col)
+        mlflow.log_param("training_rows", len(X_train_small))
 
         mlflow.log_metric("MAE_val", mae_val)
         mlflow.log_metric("MSE_val", mse_val)
