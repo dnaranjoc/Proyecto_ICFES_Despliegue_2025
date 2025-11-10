@@ -15,7 +15,7 @@ import os
 # ===============================================================
 # 1️⃣ Configurar dataset a usar (mismo nombre que en fit_scaler.py)
 # ===============================================================
-dataset_name = "saber11_encoded1"   # 👈 Cambia a "saber11_encoded2" según el dataset escalado que quieras usar
+dataset_name = "saber11_encoded2"   # 👈 Cambia a "saber11_encoded2" según el dataset escalado que quieras usar
 scaled_path = f"data/scaled/{dataset_name}"
 
 # ===============================================================
@@ -34,7 +34,7 @@ print(f"✅ Datasets cargados: Train={len(X_train_scaled):,}, Val={len(X_val_sca
 # ===============================================================
 # 3️⃣ Reducción opcional del tamaño de entrenamiento
 # ===============================================================
-reduce_train = True       # 👈 Cambia a False si quieres usar todos los datos
+reduce_train = False       # 👈 Cambia a False si quieres usar todos los datos
 n_rows_train = 1_000_000  # límite máximo de filas (usa _ para legibilidad)
 
 if reduce_train and len(X_train_scaled) > n_rows_train:
@@ -49,6 +49,7 @@ else:
 # ===============================================================
 # 4️⃣ Configuración de MLflow
 # ===============================================================
+mlflow.set_tracking_uri("http://3.82.19.231:8050")
 experiment = mlflow.set_experiment("SaberInsight_Modelos")
 
 # ===============================================================

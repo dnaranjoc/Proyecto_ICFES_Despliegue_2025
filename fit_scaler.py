@@ -12,7 +12,7 @@ import os
 # ===============================================================
 # 1️⃣ Configurar dataset a usar (ajustar manualmente)
 # ===============================================================
-dataset_name = "saber11_encoded1"   # 👈 Cambia a "saber11_encoded2" cuando quieras usar el otro
+dataset_name = "saber11_encoded2"   # 👈 Cambia a "saber11_encoded2" cuando quieras usar el otro
 dataset_path = f"data/{dataset_name}.parquet"
 
 # ===============================================================

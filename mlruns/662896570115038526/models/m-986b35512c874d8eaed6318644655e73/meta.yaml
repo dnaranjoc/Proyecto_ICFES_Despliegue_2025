@@ -1,0 +1,10 @@
+artifact_location: file:///home/ubuntu/proyecto-saberinsight/Proyecto_ICFES_Despliegue_2025/mlruns/662896570115038526/models/m-986b35512c874d8eaed6318644655e73/artifacts
+creation_timestamp: 1762796537775
+experiment_id: '662896570115038526'
+last_updated_timestamp: 1762796541888
+model_id: m-986b35512c874d8eaed6318644655e73
+model_type: null
+name: punt_lectura_critica_LinearRegression
+source_run_id: b66a09331b394342aa8de14ccd1e4a82
+status: 2
+status_message: null

@@ -1,0 +1,14 @@
+artifact_uri: file:///home/ubuntu/proyecto-saberinsight/Proyecto_ICFES_Despliegue_2025/mlruns/662896570115038526/d8af70b367e64b96850896f1a5f2fd67/artifacts
+end_time: 1762796575534
+entry_point_name: ''
+experiment_id: '662896570115038526'
+lifecycle_stage: active
+run_id: d8af70b367e64b96850896f1a5f2fd67
+run_name: saber11_encoded2_punt_sociales_ciudadanas
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1762796558767
+status: 3
+tags: []
+user_id: ubuntu
