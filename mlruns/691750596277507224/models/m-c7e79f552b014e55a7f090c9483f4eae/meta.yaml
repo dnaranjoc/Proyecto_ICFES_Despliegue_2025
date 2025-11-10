@@ -1,0 +1,10 @@
+artifact_location: file:///home/ubuntu/proyecto-saberinsight/Proyecto_ICFES_Despliegue_2025/mlruns/691750596277507224/models/m-c7e79f552b014e55a7f090c9483f4eae/artifacts
+creation_timestamp: 1762745033866
+experiment_id: '691750596277507224'
+last_updated_timestamp: 1762745036405
+model_id: m-c7e79f552b014e55a7f090c9483f4eae
+model_type: null
+name: punt_ingles_LinearRegression
+source_run_id: 1d9d09f4c62d4b5390995a9781940c72
+status: 2
+status_message: null

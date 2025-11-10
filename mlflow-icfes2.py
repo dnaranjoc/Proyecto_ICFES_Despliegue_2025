@@ -63,7 +63,7 @@ metricas_val = {}
 for col in y_train.columns:
     print(f"\n🔹 Entrenando modelo para: {col}")
 
-    with mlflow.start_run(run_name=f"{col}"):
+    with mlflow.start_run(experiment_id=experiment.experiment_id, run_name=f"{col}"):
         # Modelo
         modelo = LinearRegression()
         modelo.fit(X_train_small, y_train_small[col])

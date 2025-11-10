@@ -1,0 +1,10 @@
+artifact_location: file:///home/ubuntu/proyecto-saberinsight/Proyecto_ICFES_Despliegue_2025/mlruns/691750596277507224/models/m-46db8b157edb4bd4a1b26e9622ab45c2/artifacts
+creation_timestamp: 1762744542482
+experiment_id: '691750596277507224'
+last_updated_timestamp: 1762744544920
+model_id: m-46db8b157edb4bd4a1b26e9622ab45c2
+model_type: null
+name: punt_c_naturales_LinearRegression
+source_run_id: 21969a16add544d1b96c64d17574a5d2
+status: 2
+status_message: null

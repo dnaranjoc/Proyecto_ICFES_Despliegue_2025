@@ -1,0 +1,10 @@
+artifact_location: file:///home/ubuntu/proyecto-saberinsight/Proyecto_ICFES_Despliegue_2025/mlruns/691750596277507224/models/m-067008b530b64561b8ced6186e5a5442/artifacts
+creation_timestamp: 1762745294323
+experiment_id: '691750596277507224'
+last_updated_timestamp: 1762745296860
+model_id: m-067008b530b64561b8ced6186e5a5442
+model_type: null
+name: punt_sociales_ciudadanas_LinearRegression
+source_run_id: 46fc85eb84094a1cb54e0163ab8c636d
+status: 2
+status_message: null

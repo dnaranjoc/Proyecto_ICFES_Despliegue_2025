@@ -1,0 +1,14 @@
+artifact_uri: file:///home/ubuntu/proyecto-saberinsight/Proyecto_ICFES_Despliegue_2025/mlruns/691750596277507224/f9304c59db584f2c99c50a2386257309/artifacts
+end_time: 1762744539825
+entry_point_name: ''
+experiment_id: '691750596277507224'
+lifecycle_stage: active
+run_id: f9304c59db584f2c99c50a2386257309
+run_name: punt_matematicas
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1762744537136
+status: 3
+tags: []
+user_id: ubuntu
