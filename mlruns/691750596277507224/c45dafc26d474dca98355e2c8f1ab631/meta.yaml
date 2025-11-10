@@ -1,8 +1,9 @@
 artifact_uri: file:///home/ubuntu/proyecto-saberinsight/Proyecto_ICFES_Despliegue_2025/mlruns/691750596277507224/c45dafc26d474dca98355e2c8f1ab631/artifacts
+deleted_time: 1762746372060
 end_time: 1762744880103
 entry_point_name: ''
 experiment_id: '691750596277507224'
-lifecycle_stage: active
+lifecycle_stage: deleted
 run_id: c45dafc26d474dca98355e2c8f1ab631
 run_name: punt_lectura_critica
 source_name: ''
