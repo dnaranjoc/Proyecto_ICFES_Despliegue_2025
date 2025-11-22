@@ -2,13 +2,12 @@ from dash import callback, Input, Output, State
 import requests
 import dash
 
-# 1. URL DEL MODELO (se debe ajustar)
-API_URL = "https://TU_API_EN_RAILWAY/predict"
-# Ejemplo futuro:
-# API_URL = "https://icfes-model-app-production.up.railway.app/predict"
+from config import settings
+# Usamos la URL desde la configuración
+API_URL = settings.ICFES_API_URL
 
 # 2. Diccionarios de mapeo valores UI → modelo
-map_si_no = {"Sí": "Si", "No": "No"}
+map_si_no = {"Sí": "S", "No": "N"}
 map_binario = {"Sí": 1, "No": 0}
 map_ubicacion = {"Rural": "RURAL", "Urbano": "URBANO"}
 map_bilingue = {
@@ -32,18 +31,50 @@ map_colegio_naturaleza = {
     "Oficial": "OFICIAL",
     "No oficial": "NO OFICIAL",
 }
-map_genero_estudiante = {"Femenino": "F", "Masculino": "M"}
+map_genero_estudiante = {"Femenino": "1", "Masculino": "0"}
 map_jornada = {
     "Unica": "Unica",
     "Parcial diurna": "Parcial_Diurna",
     "Parcial flexible": "Parcial_Flexible"
 }
 map_personas_hogar = {
-    "1 a 2": "1 a 2",
-    "3 a 4": "3 a 4",
-    "5 a 6": "5 a 6",
-    "7 a 8": "7 a 8",
-    "9 o más": "9 o más"
+    "1 a 2": "1",
+    "3 a 4": "2",
+    "5 a 6": "3",
+    "7 a 8": "4",
+    "9 o más": "5"
+}
+
+map_estrato = {
+    "Sin estrato": "0",
+    "Estrato 1": "1",
+    "Estrato 2": "2",
+    "Estrato 3": "3",
+    "Estrato 4": "4",
+    "Estrato 5": "5",
+    "Estrato 6": "6"
+}
+
+map_cuartos = {
+    "Uno": "1",
+    "Dos": "2",
+    "Tres": "3",
+    "Cuatro": "4",
+    "Cinco": "5",
+    "Seis o más": "6"
+}
+
+map_educacicon = {
+    "Ninguna": "0",
+    "Primaria incompleta": "1",
+    "Primaria completa": "2",
+    "Bachillera incompleto": "3",
+    "Bachillera completo": "4",
+    "Técnica incompleta": "5",
+    "Técnica completa": "6",
+    "Educación profesional incompleta": "7",
+    "Educación profesional completa": "8",
+    "Postgrado": "9"
 }
 
 map_resultados = {
@@ -78,7 +109,7 @@ map_resultados = {
     State("input_ubicacion", "value"),
     State("input_caracter", "value"),
     State("input_generocolegio", "value"),
-    State("input_naturaleza", "value"),     # ← CORRECCIÓN 1: estaba faltando
+    State("input_naturaleza", "value"),
     State("input_sedeprincipal", "value"),
     State("input_mun_colegio", "value"),
     State("input_mun_prueba", "value"),
@@ -100,24 +131,22 @@ def procesar_prediccion(
         "cole_calendario": map_calendario[calendario],
         "cole_caracter": map_caracter[caracter],
         "cole_genero": map_genero_colegio[genero_colegio],
-
-        "cole_naturaleza": map_colegio_naturaleza[naturaleza],   # ← CORRECCIÓN 2
-
+        "cole_naturaleza": map_colegio_naturaleza[naturaleza],
         "cole_sede_principal": map_si_no[sede_principal],
-        "estu_genero": map_genero_estudiante[genero],
-        "fami_estratovivienda": estrato,
+        "estu_genero_M": map_genero_estudiante[genero],
+        "fami_estratovivienda": map_estrato[estrato],
         "fami_personashogar": map_personas_hogar[personas],
-        "fami_tieneautomovil": map_si_no[auto],
-        "fami_tienecomputador": map_si_no[compu],
-        "fami_tieneinternet": map_si_no[internet],
-        "fami_tienelavadora": map_si_no[lavadora],
+        "fami_tieneautomovil": map_binario[auto],
+        "fami_tienecomputador": map_binario[compu],
+        "fami_tieneinternet": map_binario[internet],
+        "fami_tienelavadora": map_binario[lavadora],
         "estu_edad_anios": edad,
         "mismo_municipio_prueba": map_binario[mun_prueba],
         "mismo_municipio_colegio": map_binario[mun_colegio],
         "cole_jornada_cat": map_jornada[jornada],
-        "fami_cuartoshogar_num": cuartos,
-        "fami_educacionmadre_num": map_binario[educ_madre],
-        "fami_educacionpadre_num": map_binario[educ_padre],
+        "fami_cuartoshogar_num": map_cuartos[cuartos],
+        "fami_educacionmadre_num": map_educacicon[educ_madre],
+        "fami_educacionpadre_num": map_educacicon[educ_padre],
     }
 
     # 5. Enviar al API
