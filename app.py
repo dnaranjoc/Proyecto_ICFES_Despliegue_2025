@@ -17,9 +17,13 @@ app.layout = html.Div([
         ],
         class_name="mb-4"
     ),
+
+    # Agregamos las stores para que las páginas se comuniquen entre sí
+    dcc.Store(id="data-prediccion"),
+    dcc.Location(id="redirect-resultados"),
+
     dash.page_container
 ])
 
 if __name__ == '__main__':
     app.run(debug=True)
-
