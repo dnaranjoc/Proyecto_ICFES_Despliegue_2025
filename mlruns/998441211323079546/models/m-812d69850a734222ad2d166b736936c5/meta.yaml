@@ -1,0 +1,10 @@
+artifact_location: file:///home/ubuntu/Proyecto_ICFES_Despliegue_2025/mlruns/998441211323079546/models/m-812d69850a734222ad2d166b736936c5/artifacts
+creation_timestamp: 1763839711215
+experiment_id: '998441211323079546'
+last_updated_timestamp: 1763839713080
+model_id: m-812d69850a734222ad2d166b736936c5
+model_type: null
+name: punt_matematicas_CatBoost_Final
+source_run_id: 5fe20165494f4093be8674ef6b606a4c
+status: 2
+status_message: null

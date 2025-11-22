@@ -1,0 +1,14 @@
+artifact_uri: file:///home/ubuntu/Proyecto_ICFES_Despliegue_2025/mlruns/998441211323079546/563bb2c392ed4650a86272c91f5ce3de/artifacts
+end_time: 1763839912096
+entry_point_name: ''
+experiment_id: '998441211323079546'
+lifecycle_stage: active
+run_id: 563bb2c392ed4650a86272c91f5ce3de
+run_name: saber11_encoded2_punt_sociales_ciudadanas_CatBoost_Final
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1763839812443
+status: 3
+tags: []
+user_id: ubuntu

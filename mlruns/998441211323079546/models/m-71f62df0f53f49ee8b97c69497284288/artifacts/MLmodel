@@ -1,0 +1,55 @@
+artifact_path: file:///home/ubuntu/Proyecto_ICFES_Despliegue_2025/mlruns/998441211323079546/models/m-71f62df0f53f49ee8b97c69497284288/artifacts
+flavors:
+  catboost:
+    catboost_version: 1.2.8
+    code: null
+    data: model.cb
+    model_type: CatBoostRegressor
+    save_format: cbm
+  python_function:
+    data: model.cb
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.catboost
+    python_version: 3.12.3
+is_signature_from_type_hint: false
+mlflow_version: 3.6.0
+model_id: m-71f62df0f53f49ee8b97c69497284288
+model_size_bytes: 2614653
+model_uuid: m-71f62df0f53f49ee8b97c69497284288
+prompts: null
+run_id: fdaff69c0ae64aee99da631a554f3585
+saved_input_example_info:
+  artifact_path: input_example.json
+  pandas_orient: split
+  serving_input_path: serving_input_example.json
+  type: dataframe
+signature:
+  inputs: '[{"type": "float", "name": "cole_bilingue", "required": true}, {"type":
+    "float", "name": "cole_sede_principal", "required": true}, {"type": "float", "name":
+    "fami_estratovivienda", "required": true}, {"type": "float", "name": "fami_personashogar",
+    "required": true}, {"type": "float", "name": "fami_tieneautomovil", "required":
+    true}, {"type": "float", "name": "fami_tienecomputador", "required": true}, {"type":
+    "float", "name": "fami_tieneinternet", "required": true}, {"type": "float", "name":
+    "fami_tienelavadora", "required": true}, {"type": "float", "name": "punt_global",
+    "required": true}, {"type": "float", "name": "estu_edad_anios", "required": true},
+    {"type": "float", "name": "mismo_municipio_prueba", "required": true}, {"type":
+    "float", "name": "mismo_municipio_colegio", "required": true}, {"type": "float",
+    "name": "fami_cuartoshogar_num", "required": true}, {"type": "float", "name":
+    "fami_educacionmadre_num", "required": true}, {"type": "float", "name": "fami_educacionpadre_num",
+    "required": true}, {"type": "float", "name": "cole_area_ubicacion_URBANO", "required":
+    true}, {"type": "float", "name": "cole_calendario_B", "required": true}, {"type":
+    "float", "name": "cole_calendario_OTRO", "required": true}, {"type": "float",
+    "name": "cole_caracter_NO APLICA", "required": true}, {"type": "float", "name":
+    "cole_caracter_T\u00c9CNICO", "required": true}, {"type": "float", "name": "cole_caracter_T\u00c9CNICO/ACAD\u00c9MICO",
+    "required": true}, {"type": "float", "name": "cole_genero_MASCULINO", "required":
+    true}, {"type": "float", "name": "cole_genero_MIXTO", "required": true}, {"type":
+    "float", "name": "cole_naturaleza_OFICIAL", "required": true}, {"type": "float",
+    "name": "estu_genero_M", "required": true}, {"type": "float", "name": "cole_jornada_cat_Parcial_Flexible",
+    "required": true}, {"type": "float", "name": "cole_jornada_cat_Unica", "required":
+    true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "float64", "shape": [-1]}}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2025-11-22 19:26:49.710048'

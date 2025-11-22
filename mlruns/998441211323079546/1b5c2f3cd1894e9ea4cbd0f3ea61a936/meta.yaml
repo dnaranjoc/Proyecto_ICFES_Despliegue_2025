@@ -1,0 +1,14 @@
+artifact_uri: file:///home/ubuntu/Proyecto_ICFES_Despliegue_2025/mlruns/998441211323079546/1b5c2f3cd1894e9ea4cbd0f3ea61a936/artifacts
+end_time: 1763839812441
+entry_point_name: ''
+experiment_id: '998441211323079546'
+lifecycle_stage: active
+run_id: 1b5c2f3cd1894e9ea4cbd0f3ea61a936
+run_name: saber11_encoded2_punt_ingles_CatBoost_Final
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1763839713086
+status: 3
+tags: []
+user_id: ubuntu

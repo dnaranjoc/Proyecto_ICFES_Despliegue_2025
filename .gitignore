@@ -12,6 +12,7 @@ instance/
 # Virtual environment (por si creas uno dentro del proyecto)
 venv/
 env/
+env-icfes/
 
 # Archivos temporales de Jupyter
 .ipynb_checkpoints/
@@ -19,4 +20,11 @@ env/
 # Carpetas de sistema
 .idea/
 .vscode/
+
+env-icfes/
+venv/
+__pycache__/
+mlruns/
+catboost_info/
+*.log
 

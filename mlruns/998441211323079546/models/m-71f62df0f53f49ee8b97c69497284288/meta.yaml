@@ -1,0 +1,10 @@
+artifact_location: file:///home/ubuntu/Proyecto_ICFES_Despliegue_2025/mlruns/998441211323079546/models/m-71f62df0f53f49ee8b97c69497284288/artifacts
+creation_timestamp: 1763839609697
+experiment_id: '998441211323079546'
+last_updated_timestamp: 1763839612906
+model_id: m-71f62df0f53f49ee8b97c69497284288
+model_type: null
+name: punt_lectura_critica_CatBoost_Final
+source_run_id: fdaff69c0ae64aee99da631a554f3585
+status: 2
+status_message: null

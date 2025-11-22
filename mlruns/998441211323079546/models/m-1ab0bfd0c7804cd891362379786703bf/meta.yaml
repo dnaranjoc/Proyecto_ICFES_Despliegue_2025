@@ -1,0 +1,10 @@
+artifact_location: file:///home/ubuntu/Proyecto_ICFES_Despliegue_2025/mlruns/998441211323079546/models/m-1ab0bfd0c7804cd891362379786703bf/artifacts
+creation_timestamp: 1763840008891
+experiment_id: '998441211323079546'
+last_updated_timestamp: 1763840010769
+model_id: m-1ab0bfd0c7804cd891362379786703bf
+model_type: null
+name: punt_c_naturales_CatBoost_Final
+source_run_id: f8a107b7093b48e99b22d219f145b17a
+status: 2
+status_message: null

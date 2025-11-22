@@ -1,7 +1,8 @@
 # ===============================================================
 # mlflow-icfes-CatBoost-final.py
 # Entrena modelos CatBoostRegressor sobre datasets escalados,
-# usando hiperparámetros ya calibrados (FineTuning previo).
+# usando hiperparámetros ya calibrados (FineTuning previo) y
+# GUARDANDO cada modelo también en formato .pkl.
 # ===============================================================
 
 import os
@@ -14,32 +15,31 @@ from mlflow.models.signature import infer_signature
 
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from catboost import CatBoostRegressor
+import joblib   # 👈 para guardar los modelos en .pkl
 
 # ===============================================================
 # 1️⃣ Configuración general
 # ===============================================================
 
-# Nombre del dataset escalado (ya preparado con DVC)
+# Nombre del dataset escalado
 dataset_name = "saber11_encoded2"
 scaled_path = f"data/scaled/{dataset_name}"
 
 # ¿Reducir tamaño de entrenamiento?
-reduce_train = False          # 👈 Para entrenamiento final déjalo en False
-n_rows_train = 1_000_000      # Límite si reduce_train = True
+reduce_train = False          # Para entrenamiento final déjalo en False
+n_rows_train = 1_000_000      # Límite solo si reduce_train = True
 
-# Ruta de tracking para MLflow
-# 👉 Opción local (recomendado mientras el servidor remoto no responda)
+# Ruta de tracking para MLflow (local)
 mlflow.set_tracking_uri("file:./mlruns")
-
-# Si más adelante tienes el servidor remoto activo, puedes usar:
-# mlflow.set_tracking_uri("http://54.209.209.170:8050")
-
 experiment = mlflow.set_experiment("SaberInsight_CatBoost_Final")
 
 print("✅ Configuración inicial lista.")
 print(f"   Dataset: {dataset_name}")
 print(f"   Tracking URI: {mlflow.get_tracking_uri()}")
 print(f"   Experimento MLflow: {experiment.name}")
+
+# Carpeta donde guardaremos los .pkl
+os.makedirs("modelos_pkl", exist_ok=True)
 
 # ===============================================================
 # 2️⃣ Cargar datasets escalados
@@ -76,14 +76,14 @@ else:
 # 4️⃣ Hiperparámetros base y calibrados por target
 # ===============================================================
 
-# Hiperparámetros base (por defecto) para CatBoost
+# Hiperparámetros base para CatBoost
 base_params = {
     "loss_function": "RMSE",
     "eval_metric": "RMSE",
     "verbose": 200,
     "thread_count": -1,
     "random_seed": 42,
-    # Valores por defecto razonables
+    # Valores base razonables
     "iterations": 1000,
     "learning_rate": 0.05,
     "depth": 8,
@@ -94,7 +94,9 @@ base_params = {
 }
 
 # Hiperparámetros calibrados (FineTuning) por variable objetivo
-# ✅ Estos son los que ya obtuviste para punt_lectura_critica
+# 👉 Solo tenemos seguro los de punt_lectura_critica.
+#    Para los demás puedes añadir tú los mejores parámetros
+#    que obtuviste en el script de FineTuning.
 best_params_por_target = {
     "punt_lectura_critica": {
         "iterations": 1200,
@@ -106,9 +108,7 @@ best_params_por_target = {
         "rsm": 0.9,
     },
 
-    # 👉 Cuando tengas los resultados del FineTuning para los demás,
-    #    los agregas aquí, por ejemplo:
-    #
+    # Ejemplo de cómo añadir el resto cuando tengas sus mejores params:
     # "punt_matematicas": {
     #     "iterations": ...,
     #     "learning_rate": ...,
@@ -118,10 +118,9 @@ best_params_por_target = {
     #     "random_strength": ...,
     #     "rsm": ...,
     # },
-    #
     # "punt_ingles": { ... },
     # "punt_sociales_ciudadanas": { ... },
-    # "punt_ciencias_naturales": { ... },
+    # "punt_c_naturales": { ... },
 }
 
 print("\n🧩 Hiperparámetros calibrados cargados para los siguientes targets:")
@@ -129,7 +128,7 @@ for t in best_params_por_target.keys():
     print(f"   • {t}")
 
 # ===============================================================
-# 5️⃣ Entrenamiento por target y registro en MLflow
+# 5️⃣ Entrenamiento por target, registro en MLflow y guardado .pkl
 # ===============================================================
 
 metricas_val = {}
@@ -210,7 +209,14 @@ for col in y_train.columns:
             input_example=X_val_scaled.head(3),
         )
 
-print("\n✅ Entrenamiento completado y modelos registrados en MLflow.")
+        # =======================================================
+        #  🔐 Guardar también el modelo en formato .pkl
+        # =======================================================
+        pkl_path = os.path.join("modelos_pkl", f"modelo_{col}.pkl")
+        joblib.dump(modelo, pkl_path)
+        print(f"   💾 Modelo guardado en: {pkl_path}")
+
+print("\n✅ Entrenamiento completado y modelos registrados en MLflow + .pkl.")
 
 print("\n==================== RESUMEN FINAL DE MÉTRICAS ====================")
 for col, mets in metricas_val.items():
