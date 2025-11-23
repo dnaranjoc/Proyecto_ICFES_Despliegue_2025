@@ -103,6 +103,33 @@ def predict(input_data: IcfesFeatures) -> PredictionResponse:
         )
 
     # --------------------------------------------
+    # 1.1 Convertir columnas numéricas que vienen como strings
+    # --------------------------------------------
+
+    columnas_int = [
+        "fami_estratovivienda",
+        "fami_personashogar",
+        "estu_genero_M",
+        "fami_cuartoshogar_num",
+        "fami_educacionmadre_num",
+        "fami_educacionpadre_num",
+    ]
+
+    columnas_float = [
+        "estu_edad_anios",
+    ]
+
+    # Convertir columnas int que vienen como string ("0", "1", "3" → int)
+    for col in columnas_int:
+        if col in input_df.columns:
+            input_df[col] = input_df[col].astype(int)
+
+    # Convertir columnas float ("15.0", "17", etc → float)
+    for col in columnas_float:
+        if col in input_df.columns:
+            input_df[col] = input_df[col].astype(float)
+
+    # --------------------------------------------
     # 2. Codificar variables categóricas
     # --------------------------------------------
     cat_cols = [
