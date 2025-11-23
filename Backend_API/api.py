@@ -82,6 +82,7 @@ class PredictionResponse(BaseModel):
 BASE_DIR = Path(__file__).parent
 MODELS_DIR = BASE_DIR / "models"
 
+scaler = joblib.load(MODELS_DIR / "saber11_encoded2_scaler.pkl")
 modelo_lectura = joblib.load(MODELS_DIR / "modelo_punt_lectura_critica.pkl")
 modelo_mate = joblib.load(MODELS_DIR / "modelo_punt_matematicas.pkl")
 modelo_sociales = joblib.load(MODELS_DIR / "modelo_punt_sociales_ciudadanas.pkl")
@@ -97,29 +98,84 @@ def predict(input_data: IcfesFeatures) -> PredictionResponse:
     Endpoint de predicción para el modelo ICFES.
     """
 
+    # --------------------------------------------
     # 1. Convertir la entrada a DataFrame
+    # --------------------------------------------
     try:
         input_df = pd.DataFrame([jsonable_encoder(input_data)])
     except Exception as e:
         raise HTTPException(
             status_code=400,
-            detail=f"Error al construir DataFrame a partir de la entrada: {e}",
+            detail=f"Error al construir DataFrame a partir de la entrada: {e}"
         )
 
-    # 2. Obtener predicciones de cada modelo
+    # --------------------------------------------
+    # 2. Codificar variables categóricas
+    # --------------------------------------------
+    cat_cols = [
+        'cole_area_ubicacion', 'cole_calendario', 'cole_caracter',
+        'cole_naturaleza', 'estu_genero', 'cole_jornada_cat'
+    ]
+
     try:
-        punt_lectura = float(modelo_lectura.predict(input_df)[0])
-        punt_mate = float(modelo_mate.predict(input_df)[0])
-        punt_sociales = float(modelo_sociales.predict(input_df)[0])
-        punt_c_nat = float(modelo_c_naturales.predict(input_df)[0])
-        punt_ingles = float(modelo_ingles.predict(input_df)[0])
+        df = pd.get_dummies(input_df, columns=cat_cols, drop_first=True, dtype=float)
+    except Exception as e:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Error al codificar variables categóricas: {e}"
+        )
+
+    # --------------------------------------------
+    # 2.1 Alinear columnas con las usadas por el modelo
+    #    (IMPORTANTE para que scaler y modelos no fallen)
+    # --------------------------------------------
+    try:
+        expected_cols = scaler.feature_names_in_  # columnas usadas al entrenar el scaler
+        # Añadir columnas faltantes con 0
+        for col in expected_cols:
+            if col not in df.columns:
+                df[col] = 0.0
+        # Remover columnas extra
+        df = df[expected_cols]
     except Exception as e:
         raise HTTPException(
             status_code=500,
-            detail=f"Error al predecir con los modelos: {e}",
+            detail=f"Error al alinear columnas con las del modelo: {e}"
         )
 
-    # 3. Devolver todos los puntajes
+    # --------------------------------------------
+    # 3. Escalado
+    # --------------------------------------------
+    try:
+        input_scaled = pd.DataFrame(
+            scaler.transform(df),
+            columns=df.columns,
+            index=df.index
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error al escalar variables: {e}"
+        )
+
+    # --------------------------------------------
+    # 4. Predicciones
+    # --------------------------------------------
+    try:
+        punt_lectura = float(modelo_lectura.predict(input_scaled)[0])
+        punt_mate = float(modelo_mate.predict(input_scaled)[0])
+        punt_sociales = float(modelo_sociales.predict(input_scaled)[0])
+        punt_c_nat = float(modelo_c_naturales.predict(input_scaled)[0])
+        punt_ingles = float(modelo_ingles.predict(input_scaled)[0])
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error al predecir con los modelos: {e}"
+        )
+
+    # --------------------------------------------
+    # 5. Respuesta final
+    # --------------------------------------------
     return PredictionResponse(
         punt_lectura_critica=punt_lectura,
         punt_matematicas=punt_mate,
