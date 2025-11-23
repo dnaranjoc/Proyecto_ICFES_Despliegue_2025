@@ -124,7 +124,12 @@ def procesar_prediccion(
         ubicacion, caracter, genero_colegio, naturaleza,
         sede_principal, mun_colegio, mun_prueba
 ):
-    print("🔵 Iniciando predicción...")
+    # VALIDACIÓN CRÍTICA: Solo ejecutar si realmente hubo un click
+    if n is None or n == 0:
+        print("⚠️ Callback disparado pero n_clicks es 0 o None - no hacer nada")
+        return dash.no_update, dash.no_update
+    
+    print(f"🔵 Iniciando predicción... (n_clicks={n})")
 
     # Construir datos del modelo
     datos_modelo = {
