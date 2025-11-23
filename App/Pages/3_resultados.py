@@ -49,20 +49,16 @@ def actualizar_resultados(data):
     if data is None or "prediction" not in data:
         return html.H3("No se recibieron resultados.", style={"textAlign": "center"})
 
-    return html.Pre(
-        json.dumps(data, indent=2, ensure_ascii=False),
-        style={"whiteSpace": "pre-wrap", "fontSize": "14px", "fontWeight": "700", "color": "#111827"},
-    )
-    #resultados = data["prediction"]
+    resultados = data["prediction"]
 
     # Si vino un error desde el backend, lo mostramos
-    #if isinstance(resultados, dict) and "error" in resultados:
-    #    return html.Div(
-    #        [
-    #            html.H3("Ocurrió un error al obtener la predicción.", style={"textAlign": "center"}),
-    #            html.P(str(resultados["error"]), style={"textAlign": "center", "color": "red"})
-    #        ]
-    #    )
+    if isinstance(resultados, dict) and "error" in resultados:
+        return html.Div(
+            [
+                html.H3("Ocurrió un error al obtener la predicción.", style={"textAlign": "center"}),
+                html.P(str(resultados["error"]), style={"textAlign": "center", "color": "red"})
+            ]
+        )
 
     # Extraemos puntaje global
     puntaje_global = resultados.get("punt_global", 0)

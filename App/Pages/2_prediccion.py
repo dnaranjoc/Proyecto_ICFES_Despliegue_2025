@@ -9,7 +9,7 @@ layout = html.Div([
 
     html.Label("Edad", style={"fontSize": "17px", "fontWeight": "bold"}),
     html.Br(),
-    dcc.Input(id="input_edad", type='number', placeholder="Ingresa tu edad"),
+    dcc.Input(id="input_edad", type='number', placeholder="Ingresa tu edad", value ="17"),
     html.Br(),
 
     html.Label("Género", style={"fontSize": "17px", "fontWeight": "bold"}),
@@ -321,7 +321,7 @@ layout = html.Div([
     html.Br(),
 
     #Guardamos y redirigimos
-    dcc.Store(id="data-prediccion"),
-    dcc.Location(id="redirect-resultados", refresh=True)
+    #dcc.Store(id="data-prediccion"),
+    #dcc.Location(id="redirect-resultados")
 
 ])

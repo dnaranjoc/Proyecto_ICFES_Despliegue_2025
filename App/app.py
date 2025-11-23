@@ -19,7 +19,7 @@ app.layout = html.Div([
     ),
 
     # Agregamos las stores para que las páginas se comuniquen entre sí
-    dcc.Store(id="data-prediccion"),
+    dcc.Store(id="data-prediccion", storage_type="local"),
     dcc.Location(id="redirect-resultados"),
 
     dash.page_container

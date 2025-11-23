@@ -87,44 +87,46 @@ map_resultados = {
 }
 
 
-# 3. Callback principal que construye el JSON y lo envía al API
 @callback(
-    Output("data-prediccion", "data"),
+    [
+        Output("data-prediccion", "data"),
+        Output("redirect-resultados", "href")  # href, no pathname
+    ],
     Input("btn-predict", "n_clicks"),
-
-    State("input_edad", "value"),
-    State("input_genero", "value"),
-    State("input_estrato", "value"),
-    State("input_personashogar", "value"),
-    State("input_automovil", "value"),
-    State("input_computador", "value"),
-    State("input_internet", "value"),
-    State("input_lavadora", "value"),
-    State("input_cuartos", "value"),
-    State("input_educmadre", "value"),
-    State("input_educpadre", "value"),
-    State("input_jornada", "value"),
-    State("input_calendario", "value"),
-    State("input_bilingue", "value"),
-    State("input_ubicacion", "value"),
-    State("input_caracter", "value"),
-    State("input_generocolegio", "value"),
-    State("input_naturaleza", "value"),
-    State("input_sedeprincipal", "value"),
-    State("input_mun_colegio", "value"),
-    State("input_mun_prueba", "value"),
-
+    [
+        State("input_edad", "value"),
+        State("input_genero", "value"),
+        State("input_estrato", "value"),
+        State("input_personashogar", "value"),
+        State("input_automovil", "value"),
+        State("input_computador", "value"),
+        State("input_internet", "value"),
+        State("input_lavadora", "value"),
+        State("input_cuartos", "value"),
+        State("input_educmadre", "value"),
+        State("input_educpadre", "value"),
+        State("input_jornada", "value"),
+        State("input_calendario", "value"),
+        State("input_bilingue", "value"),
+        State("input_ubicacion", "value"),
+        State("input_caracter", "value"),
+        State("input_generocolegio", "value"),
+        State("input_naturaleza", "value"),
+        State("input_sedeprincipal", "value"),
+        State("input_mun_colegio", "value"),
+        State("input_mun_prueba", "value"),
+    ],
     prevent_initial_call=True
 )
 def procesar_prediccion(
-    n, edad, genero, estrato, personas, auto, compu, internet, lavadora,
-    cuartos, educ_madre, educ_padre, jornada, calendario, bilingue,
-    ubicacion, caracter, genero_colegio, naturaleza,
-    sede_principal, mun_colegio, mun_prueba
+        n, edad, genero, estrato, personas, auto, compu, internet, lavadora,
+        cuartos, educ_madre, educ_padre, jornada, calendario, bilingue,
+        ubicacion, caracter, genero_colegio, naturaleza,
+        sede_principal, mun_colegio, mun_prueba
 ):
+    print("🔵 Iniciando predicción...")
 
-    # 4. Convertir valores al formato del modelo
-
+    # Construir datos del modelo
     datos_modelo = {
         "cole_area_ubicacion": map_ubicacion[ubicacion],
         "cole_bilingue": map_binario[bilingue],
@@ -149,7 +151,7 @@ def procesar_prediccion(
         "fami_educacionpadre_num": map_educacicon[educ_padre],
     }
 
-    # 5. Enviar al API
+    # Llamar al API
     try:
         response = requests.post(API_URL, json=datos_modelo)
         response.raise_for_status()
@@ -162,35 +164,19 @@ def procesar_prediccion(
             c_nat = prediccion["punt_c_naturales"]
             ingles = prediccion["punt_ingles"]
 
-            # Fórmula del puntaje global:
-            # ((lectura*3 + mate*3 + sociales*3 + c_nat*3 + ingles) / 13) * 5
-            punt_global = ((lectura * 3
-                            + mate * 3
-                            + sociales * 3
-                            + c_nat * 3
-                            + ingles) / 13) * 5
-
-            # Lo agregamos al diccionario de predicción
+            punt_global = ((lectura * 3 + mate * 3 + sociales * 3 + c_nat * 3 + ingles) / 13) * 5
             prediccion["punt_global"] = punt_global
 
     except Exception as e:
-        prediccion = {
-            "error": f"API no respondió correctamente: {str(e)}"
-        }
+        prediccion = {"error": f"API no respondió correctamente: {str(e)}"}
 
-    # 6. Enviar resultados a la página RESULTADOS
-    return {
+    resultado = {
         "inputs": datos_modelo,
         "prediction": prediccion
     }
 
-# CALLBACK PARA REDIRIGIR AUTOMÁTICAMENTE A /resultados
-@callback(
-    Output("redirect-resultados", "href"),
-    Input("data-prediccion", "data"),
-    prevent_initial_call=True
-)
-def ir_a_resultados(data):
-    if data is None:
-        return dash.no_update
-    return "/resultados"
+    print(f"💾 Guardando en Store: {resultado}")
+    print("🔄 Redirigiendo a /resultados")
+
+    # Retornar AMBOS: datos y redirección
+    return resultado, "/resultados"
