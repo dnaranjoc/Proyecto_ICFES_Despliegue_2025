@@ -33,7 +33,7 @@ map_colegio_naturaleza = {
 }
 map_genero_estudiante = {"Femenino": "1", "Masculino": "0"}
 map_jornada = {
-    "Unica": "Unica",
+    "Única": "Unica",
     "Parcial diurna": "Parcial_Diurna",
     "Parcial flexible": "Parcial_Flexible"
 }
@@ -68,8 +68,8 @@ map_educacicon = {
     "Ninguna": "0",
     "Primaria incompleta": "1",
     "Primaria completa": "2",
-    "Bachillera incompleto": "3",
-    "Bachillera completo": "4",
+    "Bachillerato incompleto": "3",
+    "Bachillerato completo": "4",
     "Técnica incompleta": "5",
     "Técnica completa": "6",
     "Educación profesional incompleta": "7",

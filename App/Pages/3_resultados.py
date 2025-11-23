@@ -32,7 +32,7 @@ def _card_puntaje(nombre, icono, puntaje):
 # LAYOUT PRINCIPAL (vacío, se rellenará con callback)
 layout = html.Div(
     [
-        dcc.Store(id="data-prediccion"),
+        #dcc.Store(id="data-prediccion"),
         html.Div(id="contenido-resultados")
     ]
 )
@@ -42,7 +42,7 @@ layout = html.Div(
 @callback(
     Output("contenido-resultados", "children"),
     Input("data-prediccion", "data"),
-    prevent_initial_call=True
+    #prevent_initial_call=True
 )
 def actualizar_resultados(data):
 

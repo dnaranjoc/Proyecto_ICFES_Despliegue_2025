@@ -204,9 +204,8 @@ layout = html.Div([
         options=[
             {"label": "Sí", "value": "Sí"},
             {"label": "No", "value": "No"},
-            {"label": "No Reporta", "value": "No Reporta"},
         ],
-        value="No Reporta",
+        value="No",
         labelStyle={"display": "inline-block", "padding": "6px 10px"},
         inputStyle={"margin-right": "6px"},
     ),
