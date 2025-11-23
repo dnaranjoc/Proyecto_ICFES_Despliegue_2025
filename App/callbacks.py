@@ -155,6 +155,24 @@ def procesar_prediccion(
         response.raise_for_status()
         prediccion = response.json()
 
+        if isinstance(prediccion, dict) and "punt_lectura_critica" in prediccion:
+            lectura = prediccion["punt_lectura_critica"]
+            mate = prediccion["punt_matematicas"]
+            sociales = prediccion["punt_sociales_ciudadanas"]
+            c_nat = prediccion["punt_c_naturales"]
+            ingles = prediccion["punt_ingles"]
+
+            # Fórmula del puntaje global:
+            # ((lectura*3 + mate*3 + sociales*3 + c_nat*3 + ingles) / 13) * 5
+            punt_global = ((lectura * 3
+                            + mate * 3
+                            + sociales * 3
+                            + c_nat * 3
+                            + ingles) / 13) * 5
+
+            # Lo agregamos al diccionario de predicción
+            prediccion["punt_global"] = punt_global
+
     except Exception as e:
         prediccion = {"error": str(e)}
 

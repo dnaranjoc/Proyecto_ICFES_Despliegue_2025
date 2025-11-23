@@ -5,6 +5,8 @@ import pandas as pd
 from fastapi import APIRouter, HTTPException
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
+from pathlib import Path
+import joblib
 
 router = APIRouter()
 
@@ -17,49 +19,74 @@ class IcfesFeatures(BaseModel):
     App/callbacks.py en el diccionario `datos_modelo`.
     """
 
-    cole_area_ubicacion: float
-    cole_bilingue: float
-    cole_calendario: float
-    cole_caracter: float
-    cole_genero: float
-    cole_naturaleza: float
-    cole_sede_principal: float
+    # Categóricas puras (strings)
+    cole_area_ubicacion: str
+    cole_bilingue: str
+    cole_calendario: str
+    cole_caracter: str
+    cole_genero: str
+    cole_naturaleza: str
+    cole_sede_principal: str
 
-    estu_genero_M: float
-    fami_estratovivienda: float
-    fami_personashogar: float
-    fami_tieneautomovil: float
-    fami_tienecomputador: float
-    fami_tieneinternet: float
-    fami_tienelavadora: float
+    # Codificadas como texto (aunque representen números)
+    estu_genero_M: str
+    fami_estratovivienda: str
+    fami_personashogar: str
+
+    # Binarias 0/1
+    fami_tieneautomovil: int
+    fami_tienecomputador: int
+    fami_tieneinternet: int
+    fami_tienelavadora: int
+
+    # Numérica real
     estu_edad_anios: float
 
-    mismo_municipio_prueba: float
-    mismo_municipio_colegio: float
-    cole_jornada_cat: float
-    fami_cuartoshogar_num: float
-    fami_educacionmadre_num: float
-    fami_educacionpadre_num: float
+    # Binarias 0/1
+    mismo_municipio_prueba: int
+    mismo_municipio_colegio: int
+
+    # Categóricas
+    cole_jornada_cat: str
+    fami_cuartoshogar_num: str
+    fami_educacionmadre_num: str
+    fami_educacionpadre_num: str
 
 
 class PredictionResponse(BaseModel):
     """
     Respuesta de la API.
     """
-    prediction: float
+    punt_lectura_critica: float
+    punt_matematicas: float
+    punt_sociales_ciudadanas: float
+    punt_c_naturales: float
+    punt_ingles: float
     model_version: str = "0.0.1"
     errors: Optional[str] = None
-
+    # prediction: float
+    # model_version: str = "0.0.1"
+    # errors: Optional[str] = None
 
 
 # Carga del modelo (TODO)
+# (En realidad aquí ya estamos cargando los modelos desde disco)
 
 
 # Cuando el modelo esté entrenado, acá irá algo como:
 # import joblib
 # model = joblib.load("artefactos/icfes_model.pkl")
 
-model = None  # placeholder por ahora
+# model = None  # placeholder por ahora
+
+BASE_DIR = Path(__file__).parent
+MODELS_DIR = BASE_DIR / "models"
+
+modelo_lectura = joblib.load(MODELS_DIR / "modelo_punt_lectura_critica.pkl")
+modelo_mate = joblib.load(MODELS_DIR / "modelo_punt_matematicas.pkl")
+modelo_sociales = joblib.load(MODELS_DIR / "modelo_punt_sociales_ciudadanas.pkl")
+modelo_c_naturales = joblib.load(MODELS_DIR / "modelo_punt_c_naturales.pkl")
+modelo_ingles = joblib.load(MODELS_DIR / "modelo_punt_ingles.pkl")
 
 # /predict
 
@@ -70,8 +97,8 @@ def predict(input_data: IcfesFeatures) -> PredictionResponse:
     Endpoint de predicción para el modelo ICFES.
     """
 
+    # 1. Convertir la entrada a DataFrame
     try:
-        # Convertir el input a DataFrame con una sola fila
         input_df = pd.DataFrame([jsonable_encoder(input_data)])
     except Exception as e:
         raise HTTPException(
@@ -79,18 +106,26 @@ def predict(input_data: IcfesFeatures) -> PredictionResponse:
             detail=f"Error al construir DataFrame a partir de la entrada: {e}",
         )
 
-    # TODO: cuando el modelo exista, reemplazar esto por algo como:
-    # if model is None:
-    #     raise HTTPException(status_code=500, detail="Modelo no cargado")
-    # y luego:
-    # preds = model.predict(input_df)
-    # pred_value = float(preds[0])
+    # 2. Obtener predicciones de cada modelo
+    try:
+        punt_lectura = float(modelo_lectura.predict(input_df)[0])
+        punt_mate = float(modelo_mate.predict(input_df)[0])
+        punt_sociales = float(modelo_sociales.predict(input_df)[0])
+        punt_c_nat = float(modelo_c_naturales.predict(input_df)[0])
+        punt_ingles = float(modelo_ingles.predict(input_df)[0])
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error al predecir con los modelos: {e}",
+        )
 
-    # Dummy: devolver siempre 250 como "puntaje"
-    pred_value = float(np.array([250.0])[0])
-
+    # 3. Devolver todos los puntajes
     return PredictionResponse(
-        prediction=pred_value,
+        punt_lectura_critica=punt_lectura,
+        punt_matematicas=punt_mate,
+        punt_sociales_ciudadanas=punt_sociales,
+        punt_c_naturales=punt_c_nat,
+        punt_ingles=punt_ingles,
         model_version="0.0.1",
         errors=None,
     )
