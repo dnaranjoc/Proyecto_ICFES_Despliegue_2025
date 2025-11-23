@@ -12,7 +12,7 @@ class Settings:
     DEBUG: bool = True
     ICFES_API_URL: str = os.getenv(
         "ICFES_API_URL",
-        "backend-production-aafd.up.railway.app/docs/predict",  # valor por defecto
+        "https://backend-production-aafd.up.railway.app/predict",  # valor por defecto
     )
 
 settings = Settings()
