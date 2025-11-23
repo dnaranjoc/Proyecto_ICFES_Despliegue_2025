@@ -10,11 +10,11 @@ API_URL = settings.ICFES_API_URL
 map_si_no = {"Sí": "S", "No": "N"}
 map_binario = {"Sí": 1, "No": 0}
 map_ubicacion = {"Rural": "RURAL", "Urbano": "URBANO"}
-map_bilingue = {
-    "Sí": "S",
-    "No": "N",
-    "No Reporta": "No_reporta"
-}
+#map_bilingue = {
+#    "Sí": "S",
+#    "No": "N",
+#    "No Reporta": "No_reporta"
+#}
 map_calendario = {"A": "A", "B": "B", "Otro": "OTRO"}
 map_caracter = {
     "Académico": "ACADÉMICO",
@@ -127,12 +127,12 @@ def procesar_prediccion(
 
     datos_modelo = {
         "cole_area_ubicacion": map_ubicacion[ubicacion],
-        "cole_bilingue": map_bilingue[bilingue],
+        "cole_bilingue": map_binario[bilingue],
         "cole_calendario": map_calendario[calendario],
         "cole_caracter": map_caracter[caracter],
         "cole_genero": map_genero_colegio[genero_colegio],
         "cole_naturaleza": map_colegio_naturaleza[naturaleza],
-        "cole_sede_principal": map_si_no[sede_principal],
+        "cole_sede_principal": map_binario[sede_principal],
         "estu_genero_M": map_genero_estudiante[genero],
         "fami_estratovivienda": map_estrato[estrato],
         "fami_personashogar": map_personas_hogar[personas],

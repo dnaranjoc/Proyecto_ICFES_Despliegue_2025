@@ -21,12 +21,11 @@ class IcfesFeatures(BaseModel):
 
     # Categóricas puras (strings)
     cole_area_ubicacion: str
-    cole_bilingue: str
+    #cole_bilingue: str
     cole_calendario: str
     cole_caracter: str
     cole_genero: str
     cole_naturaleza: str
-    cole_sede_principal: str
 
     # Codificadas como texto (aunque representen números)
     estu_genero_M: str
@@ -38,6 +37,8 @@ class IcfesFeatures(BaseModel):
     fami_tienecomputador: int
     fami_tieneinternet: int
     fami_tienelavadora: int
+    cole_bilingue: int
+    cole_sede_principal: int
 
     # Numérica real
     estu_edad_anios: float
@@ -114,7 +115,7 @@ def predict(input_data: IcfesFeatures) -> PredictionResponse:
     # --------------------------------------------
     cat_cols = [
         'cole_area_ubicacion', 'cole_calendario', 'cole_caracter',
-        'cole_naturaleza', 'estu_genero', 'cole_jornada_cat'
+        'cole_naturaleza', 'cole_jornada_cat'
     ]
 
     try:
