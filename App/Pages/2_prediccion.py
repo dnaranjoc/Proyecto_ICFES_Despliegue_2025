@@ -7,12 +7,12 @@ register_page(__name__, path="/prediccion", name="Predicción")
 layout = html.Div([
     html.H2("Predicción", style={'textAlign': 'center', 'color': '#1E3A8A'}),
 
-    html.Label("Edad"),
+    html.Label("Edad", style={"fontSize": "17px", "fontWeight": "bold"}),
     html.Br(),
     dcc.Input(id="input_edad", type='number', placeholder="Ingresa tu edad"),
     html.Br(),
 
-    html.Label("Género"),
+    html.Label("Género", style={"fontSize": "17px", "fontWeight": "bold"}),
     dcc.RadioItems(
         id="input_genero",
         options=[
@@ -25,7 +25,7 @@ layout = html.Div([
     ),
     html.Br(),
 
-    html.Label("Estrato"),
+    html.Label("Estrato", style={"fontSize": "17px", "fontWeight": "bold"}),
     dcc.RadioItems(
         id="input_estrato",
         options=[
@@ -43,7 +43,7 @@ layout = html.Div([
     ),
     html.Br(),
 
-    html.Label("Número de personas en el hogar"),
+    html.Label("Número de personas en el hogar", style={"fontSize": "17px", "fontWeight": "bold"}),
     dcc.RadioItems(
         id="input_personashogar",
         options=[
@@ -59,24 +59,7 @@ layout = html.Div([
     ),
     html.Br(),
 
-    html.Label("Número de personas en el hogar"),
-    dcc.Slider(
-        id="input_slider_personas",
-        min=1,
-        max=5,
-        step=1,
-        value=2,
-        marks={
-            1: "1 a 2",
-            2: "3 a 4",
-            3: "5 a 6",
-            4: "7 a 8",
-            5: "9 o más"
-        }
-    ),
-    html.Br(),
-
-    html.Label("¿En tu casa hay automovil?"),
+    html.Label("¿En tu casa hay automovil?", style={"fontSize": "17px", "fontWeight": "bold"}),
     dcc.RadioItems(
         id="input_automovil",
         options=[
@@ -89,7 +72,7 @@ layout = html.Div([
     ),
     html.Br(),
 
-    html.Label("¿En tu casa hay computador?"),
+    html.Label("¿En tu casa hay computador?", style={"fontSize": "17px", "fontWeight": "bold"}),
     dcc.RadioItems(
         id="input_computador",
         options=[
@@ -102,7 +85,7 @@ layout = html.Div([
     ),
     html.Br(),
 
-    html.Label("¿En tu casa hay servicio de internet?"),
+    html.Label("¿En tu casa hay servicio de internet?", style={"fontSize": "17px", "fontWeight": "bold"}),
     dcc.RadioItems(
         id="input_internet",
         options=[
@@ -115,7 +98,7 @@ layout = html.Div([
     ),
     html.Br(),
 
-    html.Label("¿En tu casa hay lavadora?"),
+    html.Label("¿En tu casa hay lavadora?", style={"fontSize": "17px", "fontWeight": "bold"}),
     dcc.RadioItems(
         id="input_lavadora",
         options=[
@@ -123,34 +106,71 @@ layout = html.Div([
             {"label": "No", "value": "No"},
         ],
         value="Sí",
+        labelStyle={"display": "inline-block", "padding": "6px 10px"},
+        inputStyle={"margin-right": "6px"},
     ),
     html.Br(),
 
-    html.Label("¿Cuántos cuartos hay en tu hogar?"),
-    dcc.Slider(
+    html.Label("¿Cuántos cuartos hay en tu hogar?", style={"fontSize": "17px", "fontWeight": "bold"}),
+    dcc.RadioItems(
         id="input_cuartos",
-        min=1, max=4, step=1, value=3,
-        marks={i: str(i) for i in range(1, 7)}
+        options=[
+            {"label": "Uno", "value": "Uno"},
+            {"label": "Dos", "value": "Dos"},
+            {"label": "Tres", "value": "Tres"},
+            {"label": "Cuatro", "value": "Cuatro"},
+            {"label": "Cinco", "value": "Cinco"},
+            {"label": "Seis o más", "value": "Seis o más"},
+        ],
+        value="Tres",
+        labelStyle={"display": "inline-block", "padding": "6px 10px"},
+        inputStyle={"margin-right": "6px"},
     ),
     html.Br(),
 
-    html.Label("¿Tu mamá tiene educación profesional?"),
+    html.Label("Nivel de educación de la madre", style={"fontSize": "17px", "fontWeight": "bold"}),
     dcc.RadioItems(
         id="input_educmadre",
-        options=[{"label": "Sí", "value": "Sí"}, {"label": "No", "value": "No"}],
-        value="Sí",
+        options=[
+            {"label": "Ninguna", "value": "Ninguna"},
+            {"label": "Primaria incompleta", "value": "Primaria incompleta"},
+            {"label": "Primaria completa", "value": "Primaria completa"},
+            {"label": "Bachillerato incompleto", "value": "Bachillerato incompleto"},
+            {"label": "Bachillerato completo", "value": "Bachillerato completo"},
+            {"label": "Técnica incompleta", "value":"Técnica incompleta"},
+            {"label": "Técnica completa", "value": "Técnica completa"},
+            {"label": "Educación profesional incompleta", "value": "Educación profesional incompleta"},
+            {"label": "Educación profesional completa", "value": "Educación profesional completa"},
+            {"label": "Postgrado", "value": "Postgrado"},
+        ],
+        value="Educación profesional completa",
+        labelStyle={"display": "inline-block", "padding": "6px 10px"},
+        inputStyle={"margin-right": "6px"},
     ),
     html.Br(),
 
-    html.Label("¿Tu papá tiene educación profesional?"),
+    html.Label("Nivel de educación del padre", style={"fontSize": "17px", "fontWeight": "bold"}),
     dcc.RadioItems(
         id="input_educpadre",
-        options=[{"label": "Sí", "value": "Sí"}, {"label": "No", "value": "No"}],
-        value="Sí",
+        options=[
+            {"label": "Ninguna", "value": "Ninguna"},
+            {"label": "Primaria incompleta", "value": "Primaria incompleta"},
+            {"label": "Primaria completa", "value": "Primaria completa"},
+            {"label": "Bachillerato incompleto", "value": "Bachillerato incompleto"},
+            {"label": "Bachillerato completo", "value": "Bachillerato completo"},
+            {"label": "Técnica incompleta", "value": "Técnica incompleta"},
+            {"label": "Técnica completa", "value": "Técnica completa"},
+            {"label": "Educación profesional incompleta", "value": "Educación profesional incompleta"},
+            {"label": "Educación profesional completa", "value": "Educación profesional completa"},
+            {"label": "Postgrado", "value": "Postgrado"},
+        ],
+        value="Educación profesional completa",
+        labelStyle={"display": "inline-block", "padding": "6px 10px"},
+        inputStyle={"margin-right": "6px"},
     ),
     html.Br(),
 
-    html.Label("Jornada del colegio"),
+    html.Label("Jornada del colegio", style={"fontSize": "17px", "fontWeight": "bold"}),
     dcc.RadioItems(
         id="input_jornada",
         options=[
@@ -159,10 +179,12 @@ layout = html.Div([
             {"label": "Única", "value": "Única"},
         ],
         value="Única",
+        labelStyle={"display": "inline-block", "padding": "6px 10px"},
+        inputStyle={"margin-right": "6px"},
     ),
     html.Br(),
 
-    html.Label("Colegio calendario"),
+    html.Label("Colegio calendario", style={"fontSize": "17px", "fontWeight": "bold"}),
     dcc.RadioItems(
         id="input_calendario",
         options=[
@@ -171,10 +193,12 @@ layout = html.Div([
             {"label": "Otro", "value": "Otro"},
         ],
         value="A",
+        labelStyle={"display": "inline-block", "padding": "6px 10px"},
+        inputStyle={"margin-right": "6px"},
     ),
     html.Br(),
 
-    html.Label("Colegio Bilingüe"),
+    html.Label("Colegio Bilingüe", style={"fontSize": "17px", "fontWeight": "bold"}),
     dcc.RadioItems(
         id="input_bilingue",
         options=[
@@ -183,10 +207,12 @@ layout = html.Div([
             {"label": "No Reporta", "value": "No Reporta"},
         ],
         value="No Reporta",
+        labelStyle={"display": "inline-block", "padding": "6px 10px"},
+        inputStyle={"margin-right": "6px"},
     ),
     html.Br(),
 
-    html.Label("Ubicación del Colegio"),
+    html.Label("Ubicación del Colegio", style={"fontSize": "17px", "fontWeight": "bold"}),
     dcc.RadioItems(
         id="input_ubicacion",
         options=[
@@ -194,10 +220,12 @@ layout = html.Div([
             {"label": "Urbano", "value": "Urbano"},
         ],
         value="Urbano",
+        labelStyle={"display": "inline-block", "padding": "6px 10px"},
+        inputStyle={"margin-right": "6px"},
     ),
     html.Br(),
 
-    html.Label("Caracter del Colegio"),
+    html.Label("Caracter del Colegio", style={"fontSize": "17px", "fontWeight": "bold"}),
     dcc.RadioItems(
         id="input_caracter",
         options=[
@@ -207,10 +235,12 @@ layout = html.Div([
             {"label": "No aplica", "value": "No aplica"},
         ],
         value="Académico",
+        labelStyle={"display": "inline-block", "padding": "6px 10px"},
+        inputStyle={"margin-right": "6px"},
     ),
     html.Br(),
 
-    html.Label("Género del Colegio"),
+    html.Label("Género del Colegio", style={"fontSize": "17px", "fontWeight": "bold"}),
     dcc.RadioItems(
         id="input_generocolegio",
         options=[
@@ -219,10 +249,12 @@ layout = html.Div([
             {"label": "Masculino", "value": "Masculino"},
         ],
         value="Mixto",
+        labelStyle={"display": "inline-block", "padding": "6px 10px"},
+        inputStyle={"margin-right": "6px"},
     ),
     html.Br(),
 
-    html.Label("Naturaleza del Colegio"),
+    html.Label("Naturaleza del Colegio", style={"fontSize": "17px", "fontWeight": "bold"}),
     dcc.RadioItems(
         id="input_naturaleza",
         options=[
@@ -230,10 +262,12 @@ layout = html.Div([
             {"label": "No oficial", "value": "No oficial"},
         ],
         value="Oficial",
+        labelStyle={"display": "inline-block", "padding": "6px 10px"},
+        inputStyle={"margin-right": "6px"},
     ),
     html.Br(),
 
-    html.Label("¿Estudias en la sede principal del Colegio?"),
+    html.Label("¿Estudias en la sede principal del Colegio?", style={"fontSize": "17px", "fontWeight": "bold"}),
     dcc.RadioItems(
         id="input_sedeprincipal",
         options=[
@@ -241,10 +275,12 @@ layout = html.Div([
             {"label": "No", "value": "No"},
         ],
         value="Sí",
+        labelStyle={"display": "inline-block", "padding": "6px 10px"},
+        inputStyle={"margin-right": "6px"},
     ),
     html.Br(),
 
-    html.Label("¿Vives en el mismo municipio donde estudias?"),
+    html.Label("¿Vives en el mismo municipio donde estudias?", style={"fontSize": "17px", "fontWeight": "bold"}),
     dcc.RadioItems(
         id="input_mun_colegio",
         options=[
@@ -252,10 +288,12 @@ layout = html.Div([
             {"label": "No", "value": "No"},
         ],
         value="Sí",
+        labelStyle={"display": "inline-block", "padding": "6px 10px"},
+        inputStyle={"margin-right": "6px"},
     ),
     html.Br(),
 
-    html.Label("¿Vives en el mismo municipio donde vas a presentar la prueba?"),
+    html.Label("¿Vives en el mismo municipio donde vas a presentar la prueba?", style={"fontSize": "17px", "fontWeight": "bold"}),
     dcc.RadioItems(
         id="input_mun_prueba",
         options=[
@@ -263,6 +301,8 @@ layout = html.Div([
             {"label": "No", "value": "No"},
         ],
         value="Sí",
+        labelStyle={"display": "inline-block", "padding": "6px 10px"},
+        inputStyle={"margin-right": "6px"},
     ),
     html.Br(),
 
@@ -286,4 +326,3 @@ layout = html.Div([
     dcc.Location(id="redirect-resultados", refresh=True)
 
 ])
-
