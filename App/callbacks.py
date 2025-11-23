@@ -174,7 +174,9 @@ def procesar_prediccion(
             prediccion["punt_global"] = punt_global
 
     except Exception as e:
-        prediccion = {"error": str(e)}
+        prediccion = {
+            "error": f"API no respondió correctamente: {str(e)}"
+        }
 
     # 6. Enviar resultados a la página RESULTADOS
     return {
