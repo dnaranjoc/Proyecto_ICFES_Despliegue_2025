@@ -12,8 +12,8 @@ class Settings:
     DEBUG: bool = True
     ICFES_API_URL: str = os.getenv(
         "ICFES_API_URL",
-        "http://127.0.0.1:8000/predict", #valor por defecto
-    #    "https://backend-production-aafd.up.railway.app/predict",  # valor desplegado
+    #    "http://127.0.0.1:8000/predict", #valor por defecto para el despliegue local
+        "https://backend-production-aafd.up.railway.app/predict",  # valor desplegado en railway
     )
 
 settings = Settings()

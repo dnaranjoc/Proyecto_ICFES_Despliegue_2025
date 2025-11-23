@@ -70,14 +70,6 @@ class PredictionResponse(BaseModel):
     # errors: Optional[str] = None
 
 
-# Carga del modelo (TODO)
-# (En realidad aquí ya estamos cargando los modelos desde disco)
-
-
-# Cuando el modelo esté entrenado, acá irá algo como:
-# import joblib
-# model = joblib.load("artefactos/icfes_model.pkl")
-
 # model = None  # placeholder por ahora
 
 BASE_DIR = Path(__file__).parent
