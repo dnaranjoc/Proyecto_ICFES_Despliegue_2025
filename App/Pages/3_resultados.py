@@ -3,7 +3,7 @@ from callbacks import map_resultados
 
 register_page(__name__, path="/resultados", name="Resultados")
 
-#FUNCION PARA TARJETAS DE PUNTAJE
+# FUNCION PARA TARJETAS DE PUNTAJE
 def _card_puntaje(nombre, icono, puntaje):
     return html.Div(
         style={
@@ -29,7 +29,7 @@ def _card_puntaje(nombre, icono, puntaje):
     )
 
 
-#LAYOUT PRINCIPAL (vacío, se rellenará con callback)
+# LAYOUT PRINCIPAL (vacío, se rellenará con callback)
 layout = html.Div(
     [
         dcc.Store(id="data-prediccion"),
@@ -51,14 +51,32 @@ def actualizar_resultados(data):
 
     resultados = data["prediction"]
 
+    # Si vino un error desde el backend, lo mostramos
+    if isinstance(resultados, dict) and "error" in resultados:
+        return html.Div(
+            [
+                html.H3("Ocurrió un error al obtener la predicción.", style={"textAlign": "center"}),
+                html.P(str(resultados["error"]), style={"textAlign": "center", "color": "red"})
+            ]
+        )
+
     # Extraemos puntaje global
     puntaje_global = resultados.get("punt_global", 0)
 
     # Cálculo simple de percentil (ajustable luego)
     percentil = min(max(int((puntaje_global / 500) * 100), 1), 99)
 
-    # Determinar materias más débiles
-    materias = {k: v for k, v in resultados.items() if k != "punt_global"}
+    # Filtramos SOLO las materias (las claves que tenemos en map_resultados)
+    materias = {
+        k: v for k, v in resultados.items()
+        if k in map_resultados and k != "punt_global"
+    }
+
+    # Si por alguna razón no hay materias válidas, mostramos mensaje
+    if not materias:
+        return html.H3("No se pudieron calcular los puntajes por materia.", style={"textAlign": "center"})
+
+    # Determinar materias más débiles (2 puntajes más bajos)
     materias_ordenadas = sorted(materias.items(), key=lambda x: x[1])
     peores = materias_ordenadas[:2]
     texto_mejora = f"Refuerza tus conocimientos en {map_resultados[peores[0][0]]} y {map_resultados[peores[1][0]]}."
@@ -130,8 +148,7 @@ def actualizar_resultados(data):
                 style={"display": "flex", "gap": "16px", "flexWrap": "wrap"},
                 children=[
                     _card_puntaje(map_resultados[k], "📘", v)
-                    for k, v in resultados.items()
-                    if k != "punt_global"
+                    for k, v in materias.items()  # 
                 ]
             ),
 
