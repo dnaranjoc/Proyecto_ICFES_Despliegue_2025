@@ -3,6 +3,14 @@ from callbacks import map_resultados
 
 register_page(__name__, path="/resultados", name="Resultados")
 
+ICONOS_MATERIAS = {
+    "punt_lectura_critica": "📘",
+    "punt_matematicas": "📐",
+    "punt_sociales_ciudadanas": "🌍",
+    "punt_c_naturales": "🧪",
+    "punt_ingles": "🗣️",
+}
+
 # FUNCION PARA TARJETAS DE PUNTAJE
 def _card_puntaje(nombre, icono, puntaje):
     return html.Div(
@@ -61,7 +69,7 @@ def actualizar_resultados(data):
         )
 
     # Extraemos puntaje global
-    puntaje_global = resultados.get("punt_global", 0)
+    puntaje_global = int(resultados.get("punt_global", 0))
 
     # Cálculo simple de percentil (ajustable luego)
     percentil = min(max(int((puntaje_global / 500) * 100), 1), 99)
@@ -147,7 +155,7 @@ def actualizar_resultados(data):
             html.Div(
                 style={"display": "flex", "gap": "16px", "flexWrap": "wrap"},
                 children=[
-                    _card_puntaje(map_resultados[k], "📘", v)
+                    _card_puntaje(map_resultados[k], ICONOS_MATERIAS[k], int(v))
                     for k, v in materias.items()  # 
                 ]
             ),
